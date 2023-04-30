@@ -8,11 +8,12 @@ app = FastAPI()
 pat = re.compile(r"(NP\s->\s)(NP)(\s((CC)|(,))\s(NP))+")
 
 
-def mix_algorithm(tree, positions_for_mix):
+def mix_algorithm(tree, positions_for_mix, limit):
     permutations = []
 
     index_permutations = list(itertools.permutations(positions_for_mix))
     index_permutations.remove(positions_for_mix)
+    index_permutations = index_permutations[0:limit]
 
     original = tree.copy()
 
@@ -24,7 +25,7 @@ def mix_algorithm(tree, positions_for_mix):
 
 
 @app.get("/paraphrase")
-async def paraphrase(tree: str = "", limit: int = 0):
+async def paraphrase(tree: str = "", limit: int = 20):
     t = Tree.fromstring(tree)
 
     all_positions = t.treepositions(order='preorder')
@@ -41,6 +42,7 @@ async def paraphrase(tree: str = "", limit: int = 0):
     result = {"paraphrases": []}
     for i in trees_for_mixing:
         positions_for_mixing = tuple(range(0, len(t[i]) + 1, 2))
-        for t[i] in mix_algorithm(t[i], positions_for_mixing):
+        for t[i] in mix_algorithm(t[i], positions_for_mixing, limit):
             result["paraphrases"].append({"tree": t.pformat(margin=500)})
+            limit -= 1
     return result
