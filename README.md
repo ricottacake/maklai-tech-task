@@ -7,12 +7,14 @@ The main idea of this algorithm is to sift out unsuitable trees, and then check 
 
 #### How run and test?
 1. Install python and pip for your OS
-2. Go to project folder
-3. Install dependencies
+2. Clone repository
+`git clone https://github.com/ricottacake/maklai-tech-task.git`
+3. Go to project folder
+4. Install dependencies
 `pip install -r requirements.txt`
-3. Run via FastAPI
+5. Run via FastAPI
 `python3 -m uvicorn main:app --reload`
-4. Test
+6. Test
 http://127.0.0.1:8000/paraphrase?tree=*TREE*
 
 #### Example
